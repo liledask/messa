@@ -11,12 +11,14 @@ import { useAuth } from "@/contexts/AuthContext";
 interface ChatContainerProps {
   currentUser: User;
   recipient: User;
+  onBack: () => void;
   initialMessages?: DirectMessage[];
 }
 
 const ChatContainer = ({ 
   currentUser, 
   recipient, 
+  onBack, 
   initialMessages = [] 
 }: ChatContainerProps) => {
   const [messages, setMessages] = useState<DirectMessage[]>(initialMessages);
@@ -112,7 +114,7 @@ const ChatContainer = ({
 
   return (
     <div className="flex flex-col h-full bg-[#0b141a]">
-      <ChatHeader recipient={recipient} />
+      <ChatHeader recipient={recipient} onBack={onBack} />
       <MessageList 
         messages={messages} 
         currentUserId={authUser?.id} 

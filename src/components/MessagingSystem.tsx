@@ -183,7 +183,7 @@ const MessagingSystem = ({
     reviews_count: 0
   };
 
-  const handleContactSelect = (contact: User) => {
+  const handleSelectContact = (contact: User) => {
     setSelectedContact(contact);
     setShowChat(true);
     // Clear unread count when selecting a contact
@@ -201,67 +201,27 @@ const MessagingSystem = ({
   };
 
   return (
-    <div className={`flex flex-col h-full bg-white ${className}`}>
-      {showHeader && (
-        <div className="bg-red-600 text-white p-3 flex items-center justify-between border-b border-red-700">
-          {showChat ? (
-            <button onClick={handleBack} className="flex items-center gap-2">
-              <ArrowLeft className="h-5 w-5" />
-              <span className="text-xl font-semibold">Back</span>
-            </button>
-          ) : (
-            <a 
-              href="https://www.myeventadvisor.com" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="text-xl font-semibold hover:text-gray-200 transition-colors"
-            >
-              {headerTitle}
-            </a>
-          )}
-        </div>
-      )}
-      
-      <main className="flex-1 flex flex-col md:flex-row">
-        <div className={`w-full md:w-[30%] h-full border-b md:border-b-0 md:border-r border-gray-200 bg-white ${
-          showChat ? 'hidden md:block' : 'block'
-        }`}>
-          <ContactList 
-            contacts={contacts} 
-            onSelectContact={handleContactSelect}
-            selectedContactId={selectedContact?.id}
-            loading={loading}
-            unreadCounts={unreadCounts}
+    <div className="flex h-full">
+      <div className="w-1/3 border-r">
+        <ContactList
+          onSelectContact={handleSelectContact}
+          selectedContactId={selectedContact?.id}
+          unreadCounts={unreadCounts}
+        />
+      </div>
+      <div className="flex-1">
+        {selectedContact ? (
+          <ChatContainer
+            currentUser={currentUser}
+            recipient={selectedContact}
+            onBack={handleBack}
           />
-        </div>
-        
-        <div className={`flex-1 h-full bg-white ${
-          showChat ? 'block' : 'hidden md:block'
-        }`}>
-          {selectedContact ? (
-            <ChatContainer 
-              currentUser={currentUser}
-              recipient={selectedContact}
-              initialMessages={[]}
-            />
-          ) : (
-            <div className="h-full flex items-center justify-center bg-gray-50">
-              <div className="text-center text-gray-600">
-                <p className="text-lg mb-2">Welcome to MEA Messages</p>
-                <p className="text-sm">Select a contact to start messaging</p>
-              </div>
-            </div>
-          )}
-        </div>
-      </main>
-
-      <ConversationButton 
-        currentUser={currentUser}
-        onSelectContact={(contact) => {
-          handleContactSelect(contact);
-          fetchConversationContacts();
-        }} 
-      />
+        ) : (
+          <div className="h-full flex items-center justify-center text-gray-500">
+            Select a contact to start chatting
+          </div>
+        )}
+      </div>
     </div>
   );
 };
